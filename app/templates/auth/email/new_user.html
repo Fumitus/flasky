@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+<p>Dear ADMIN,</p>
+<p>New User {{ user.username }} joined <b>Test_flasky_WEB!</b>
+<a href="{{ url_for('auth.login', token=token, _external=True) }}">click here to connect to web</a></p>
+<p>Alternatively, you can paste the following link in your browser's address bar:</p>
+<p>{{ url_for('auth.login', token=token, _external=True) }}</p>
+<p>user ID: {{ user.id }}</p>
+    <address>
+        <p>user email: <a href="mailto:user.email">{{ user.email }}</a></p>
+    </address>
+
+
+<p>Sincerely,</p>
+<p>WEB</p>
+</body>
+</html>
+

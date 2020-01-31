@@ -1,0 +1,9 @@
+Dear Admin
+New user {{ user.username }} joined test_flasky_web!
+User ID: {{ user.id }}
+User email: {{ user.email }}
+
+
+Sincerely,
+
+WEB
