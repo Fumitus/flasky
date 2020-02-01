@@ -41,9 +41,9 @@ def register():
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
-        send_email(user.email, 'Confirm your Account', 'auth/email/confirm', user=user, token=token)
-        send_email(current_app.config['ADMIN'], 'New User joined', 'auth/email/new_user', user=user)
-        flash('Confirmation email has been sent to you by email')
+        send_email(user.email, 'Your account', 'auth/email/confirm', user=user)
+        send_email(current_app.config['ADMIN'], 'New User joined', 'auth/email/new_user', user=user, token=token)
+        flash('Message has been sent to your email')
         return redirect(url_for('main.index'))
     return render_template('auth/register.html', form=form)
 
@@ -82,8 +82,9 @@ def unconfirmed():
 @login_required
 def resend_confirmation():
     token = current_user.generate_confirmation_token()
-    send_email(current_user.email, 'Confirm Your Account',
-               'auth/email/confirm', user=current_user, token=token)
+    send_email(current_user.email, 'Your Account',
+               'auth/email/confirm', user=current_user)
+    send_email(current_app.config['ADMIN'], 'New User joined', 'auth/email/new_user', user=current_user, token=token)
     flash('A new confirmation email has been sent to you by email.')
     return redirect(url_for('main.index'))
 

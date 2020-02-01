@@ -1,11 +1,11 @@
-Dear {{ user.username }},
+Šeimos nary {{ user.username }},
 
-Welcome to our WEB!
+Sveikas prisijungęs prie Šeimos puslapio!
 
-To confirm your account please click on the following link:
+Palauk kol administratorius patvirtins tavo paskyrą. Norėdamas prisijungti spausk šią nuorodą:
 
-{{ url_for('auth.confirm', token=token, _external=True) }}
+{{ url_for('auth.login', _external=True) }}
 
-Sincerely,
+Linkėjimai,
 
-WEB team
+Andrius Bai
