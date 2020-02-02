@@ -205,6 +205,7 @@ class User(UserMixin, db.Model):
     def gravatar(self, size=100, default='mm', rating='g'):
         if request.is_secure:
             url = 'https://secure.gravatar.com/avatar'
+            hash = self.avatar_hash or self.gravatar_hash()
         else:
             url = 'http://www.gravatar.com/avatar'
             hash = self.avatar_hash or self.gravatar_hash()
