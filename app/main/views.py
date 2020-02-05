@@ -86,6 +86,7 @@ def edit_profile():
         current_user.name = form.name.data
         current_user.location = form.location.data
         current_user.about_me = form.about_me.data
+        current_user.birthday_date = form.birthday.data
         db.session.add(current_user._get_current_object())
         db.session.commit()
         flash('Your profile has been updated.')
@@ -93,6 +94,7 @@ def edit_profile():
     form.name.data = current_user.name
     form.location.data = current_user.location
     form.about_me.data = current_user.about_me
+    form.birthday.data = current_user.birthday_date
     return render_template('edit_profile.html', form=form)
 
 
@@ -110,6 +112,7 @@ def edit_profile_admin(id):
         user.name = form.name.data
         user.location = form.location.data
         user.about_me = form.about_me.data
+        current_user.birthday_date = form.birthday.data
         db.session.add(user)
         db.session.commit()
         flash('The profile has been updated.')
@@ -121,6 +124,7 @@ def edit_profile_admin(id):
     form.name.data = user.name
     form.location.data = user.location
     form.about_me.data = user.about_me
+    form.birthday.data = current_user.birthday_date
     return render_template('edit_profile.html', form=form, user=user)
 
 
