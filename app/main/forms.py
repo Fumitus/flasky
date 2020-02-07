@@ -25,7 +25,7 @@ class EditProfileForm(FlaskForm):
             raise ValidationError("Date format is not correct. Please use yyyy-mm-dd.")
 
 
-class EditProfileAdminForm(FlaskForm):
+class EditProfileAdminForm(EditProfileForm):
     email = StringField('Email', validators=[DataRequired(), Length(1, 64),
                                              Email()])
     username = StringField('Username',
@@ -55,12 +55,6 @@ class EditProfileAdminForm(FlaskForm):
         if field.data != self.user.username and \
                 User.query.filter_by(username=field.data).first():
             raise ValidationError('Username already in use.')
-
-    def validate_birthday(self, birthday):
-        date = birthday.data
-        date_match = re.search(r"^(19|20)\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])", date)
-        if not date_match:
-            raise ValidationError("Date format is not correct. Please use yyyy-mm-dd.")
 
 
 class PostForm(FlaskForm):
