@@ -1,7 +1,7 @@
 New post added,
 
 User {{ user.username }} created new post: {{ post.body }}.
-Link to view it: {{ url_for('main.index', _external=True) }}
+Link to view it: {{ url_for('main.post', id=post.id, _external=True) }}
 
 
 Sincerely,
