@@ -1,0 +1,9 @@
+New post added,
+
+User {{ user.username }} created new post: {{ post.body }}.
+Link to view it: {{ url_for('main.index', _external=True) }}
+
+
+Sincerely,
+
+WEB

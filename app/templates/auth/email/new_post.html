@@ -1,0 +1,8 @@
+<p>New post added,</p>
+<p>User {{ user.username }} created new post: {{ post.body }}.
+    To reach page <a href="{{ url_for('main.index') }}">click here</a>.</p>
+<p>Alternatively, you can paste the following link in your browser's address bar:</p>
+<p>{{ url_for('main.index', _external=True) }}</p>
+<p>Sincerely,</p>
+<p>Andrius</p>
+<p><small>Note: replies to this email address are not monitored.</small></p>

@@ -1,0 +1,9 @@
+New comment added,
+
+New comment by {{ user.username }} on post: {{ post.body }} was created.
+Link to view it: {{ url_for('main.index', _external=True) }}
+
+
+Sincerely,
+
+WEB

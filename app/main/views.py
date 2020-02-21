@@ -7,6 +7,7 @@ from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
 from .. import db
 from ..models import User, Role, Post, Permission, Comment
 from ..decorators import admin_required, permission_required
+from ..email import send_email
 
 
 @main.after_app_request
@@ -31,16 +32,40 @@ def server_shutdown():
     return 'Shutting down...'
 
 
+@login_required
+def inform_followers():
+    followers_emails = []
+    show_followed = False
+    if current_user.is_authenticated:
+        show_followed = bool(request.cookies.get('show_followed', ''))
+    if show_followed:
+        query = current_user.followers_id
+    else:
+        send_email(current_app.config['ADMIN'], 'current_user do not present',
+                   'auth/email/no_current_user', user=current_user)
+    follows = query.all()
+    for user_f in follows:
+        if user != current_user:
+            followers_emails.append(user_f.email)
+
+        return followers_emails
+
+
 @main.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
     form = PostForm()
+    receivers = current_user.inform_followers
     show_followed = False
     if current_user.can(Permission.WRITE) and form.validate_on_submit():
         post = Post(body=form.body.data,
                     author=current_user._get_current_object())
         db.session.add(post)
         db.session.commit()
+        if receivers != 0:
+            for user_email in receivers:
+                send_email(user_email, 'New Post added',
+                           'auth/email/new_post', user=current_user, post=post)
         return redirect(url_for('.index'))
 
     page = request.args.get('page', 1, type=int)
@@ -132,6 +157,7 @@ def edit_profile_admin(id):
 def post(id):
     post = Post.query.get_or_404(id)
     form = CommentForm()
+    receivers = current_user.inform_followers
     if form.validate_on_submit():
         comment = Comment(
             body=form.body.data,
@@ -140,6 +166,10 @@ def post(id):
         db.session.add(comment)
         db.session.commit()
         flash("Your comment has been published.")
+        if receivers != 0:
+            for user_email in receivers:
+                send_email(user_email, 'New Comment to Post added',
+                           'auth/email/new_comment', user=current_user, post=post)
         return redirect(url_for('.post', id=post.id, page=-1))
     page = request.args.get('page', 1, type=int)
     if page == -1:
@@ -288,6 +318,3 @@ def moderate_disable(id):
     db.session.commit()
     return redirect(url_for('.moderate',
                             page=request.args.get('page', 1, type=int)))
-
-
-

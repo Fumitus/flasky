@@ -252,6 +252,21 @@ class User(UserMixin, db.Model):
         return Post.query.join(Follow, Follow.followed_id == Post.author_id)\
             .filter(Follow.follower_id == self.id)
 
+    @property
+    def followers_id(self):
+        return User.query.join(Follow, Follow.follower_id == User.id)\
+            .filter(Follow.followed_id == self.id)
+
+    @property
+    def inform_followers(self):
+        emails = []
+        query = self.followers_id
+        follows = query.all()
+        for user in follows:
+            if user != self:
+                emails.append(user.email)
+        return emails
+
     def to_json(self):
         json_user = {
             'url': url_for('api.get_user', id=self.id),
