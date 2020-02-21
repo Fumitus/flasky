@@ -32,25 +32,6 @@ def server_shutdown():
     return 'Shutting down...'
 
 
-@login_required
-def inform_followers():
-    followers_emails = []
-    show_followed = False
-    if current_user.is_authenticated:
-        show_followed = bool(request.cookies.get('show_followed', ''))
-    if show_followed:
-        query = current_user.followers_id
-    else:
-        send_email(current_app.config['ADMIN'], 'current_user do not present',
-                   'auth/email/no_current_user', user=current_user)
-    follows = query.all()
-    for user_f in follows:
-        if user != current_user:
-            followers_emails.append(user_f.email)
-
-        return followers_emails
-
-
 @main.route('/', methods=['GET', 'POST'])
 @login_required
 def index():

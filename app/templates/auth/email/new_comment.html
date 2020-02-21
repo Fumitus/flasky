@@ -1,6 +1,6 @@
 <p>New comment added,</p>
 <p>New comment by {{ user.username }} on post: {{ post.body }} was created.
-    To reach page <a href="{{ url_for('main.index') }}">click here</a>.</p>
+    To reach page <a href="{{ url_for('main.index', _external=True) }}">click here</a>.</p>
 <p>Alternatively, you can paste the following link in your browser's address bar:</p>
 <p>{{ url_for('main.index', _external=True) }}</p>
 <p>Sincerely,</p>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<body>
+<p>Dear ADMIN,</p>
+<p>current_user call for User: {{ user.username }} in <b>Baiksčiai-WEB!</b> do not work.
+<a href="{{ url_for('auth.login', _external=True) }}">click here to connect to web</a></p>
+<p>Alternatively, you can paste the following link in your browser's address bar:</p>
+<p>{{ url_for('auth.login', _external=True) }}</p>
+
+<p>Sincerely,</p>
+<p>WEB</p>
+</body>
+</html>
