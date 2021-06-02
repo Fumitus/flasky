@@ -6,6 +6,6 @@ httpie==1.0.3
 idna==2.5
 Pygments==2.3.1
 requests==2.21.0
-urllib3==1.24.2
+urllib3==1.26.5
 coverage==4.5.3
 selenium==3.141.0
