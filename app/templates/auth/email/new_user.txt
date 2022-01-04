@@ -1,6 +1,6 @@
 Dear Admin
 
-New user {{ user.username }} joined test_flasky_web!
+New user {{ user.username }} joined Baikščiai-WEB!
 User ID: {{ user.id }}
 User email: {{ user.email }}
 Link to confirm new user account: {{ url_for('auth.confirm', token=token, _external=True) }}

@@ -217,3 +217,20 @@ class UserModelTestCase(unittest.TestCase):
                          'posts_url', 'followed_posts_url', 'post_count']
         self.assertEqual(sorted(json_user.keys()), sorted(expected_keys))
         self.assertEqual('/api/v1/users/' + str(u.id), json_user['url'])
+
+    def test_inform_followers(self):
+        u1 = User(email='john@example.com', password='cat')
+        u2 = User(email='susan@example.org', password='dog')
+        db.session.add(u1)
+        db.session.add(u2)
+        db.session.commit()
+        self.assertFalse(u1.is_following(u2))
+        self.assertFalse(u1.is_followed_by(u2))
+        u1.follow(u2)
+        db.session.add(u1)
+        db.session.commit()
+        self.assertTrue(u1.is_following(u2))
+        self.assertFalse(u1.is_followed_by(u2))
+        self.assertTrue(u2.is_followed_by(u1))
+        u = u2.inform_followers
+        self.assertTrue(u == ['john@example.com'])

@@ -7,6 +7,7 @@ from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
 from .. import db
 from ..models import User, Role, Post, Permission, Comment
 from ..decorators import admin_required, permission_required
+from ..email import send_email
 
 
 @main.after_app_request
@@ -35,12 +36,17 @@ def server_shutdown():
 @login_required
 def index():
     form = PostForm()
+    receivers = current_user.inform_followers
     show_followed = False
     if current_user.can(Permission.WRITE) and form.validate_on_submit():
         post = Post(body=form.body.data,
                     author=current_user._get_current_object())
         db.session.add(post)
         db.session.commit()
+        if receivers != 0:
+            for user_email in receivers:
+                send_email(user_email, 'New Post added',
+                           'auth/email/new_post', user=current_user, post=post)
         return redirect(url_for('.index'))
 
     page = request.args.get('page', 1, type=int)
@@ -86,6 +92,7 @@ def edit_profile():
         current_user.name = form.name.data
         current_user.location = form.location.data
         current_user.about_me = form.about_me.data
+        current_user.birthday_date = form.birthday.data
         db.session.add(current_user._get_current_object())
         db.session.commit()
         flash('Your profile has been updated.')
@@ -93,6 +100,7 @@ def edit_profile():
     form.name.data = current_user.name
     form.location.data = current_user.location
     form.about_me.data = current_user.about_me
+    form.birthday.data = current_user.birthday_date
     return render_template('edit_profile.html', form=form)
 
 
@@ -110,6 +118,7 @@ def edit_profile_admin(id):
         user.name = form.name.data
         user.location = form.location.data
         user.about_me = form.about_me.data
+        user.birthday_date = form.birthday.data
         db.session.add(user)
         db.session.commit()
         flash('The profile has been updated.')
@@ -121,13 +130,16 @@ def edit_profile_admin(id):
     form.name.data = user.name
     form.location.data = user.location
     form.about_me.data = user.about_me
+    form.birthday.data = user.birthday_date
     return render_template('edit_profile.html', form=form, user=user)
 
 
 @main.route('/post/<int:id>', methods=['GET', 'POST'])
+@login_required
 def post(id):
     post = Post.query.get_or_404(id)
     form = CommentForm()
+    receivers = current_user.inform_followers
     if form.validate_on_submit():
         comment = Comment(
             body=form.body.data,
@@ -136,6 +148,10 @@ def post(id):
         db.session.add(comment)
         db.session.commit()
         flash("Your comment has been published.")
+        if receivers != 0:
+            for user_email in receivers:
+                send_email(user_email, 'New Comment to Post added',
+                           'auth/email/new_comment', user=current_user, post=post)
         return redirect(url_for('.post', id=post.id, page=-1))
     page = request.args.get('page', 1, type=int)
     if page == -1:
@@ -284,6 +300,3 @@ def moderate_disable(id):
     db.session.commit()
     return redirect(url_for('.moderate',
                             page=request.args.get('page', 1, type=int)))
-
-
-

@@ -10,7 +10,7 @@ class Config:
         ['true', 'on', '1']
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    MAIL_SUBJECT_PREFIX = '[Automatic message from Flasky]'
+    MAIL_SUBJECT_PREFIX = '[Automatinė žinutė nuo Šeimos dienoraščio]'
     MAIL_SENDER = 'WEB Admin <admin@demo.com>'
     ADMIN = os.environ.get('ADMIN')
     TEST_ADMIN_PASS = os.environ.get('TEST_ADMIN_PASS')

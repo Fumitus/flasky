@@ -1,0 +1,10 @@
+Dear Admin
+
+current_user function do not work for user {{ user.username }} in Baikščiai-WEB!
+
+Link to WEB: {{ url_for('auth.login', _external=True) }}
+
+
+Sincerely,
+
+WEB

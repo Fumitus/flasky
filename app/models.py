@@ -96,6 +96,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(64))
     location = db.Column(db.String(64))
     about_me = db.Column(db.Text())
+    birthday_date = db.Column(db.String(10))
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
@@ -205,6 +206,7 @@ class User(UserMixin, db.Model):
     def gravatar(self, size=100, default='mm', rating='g'):
         if request.is_secure:
             url = 'https://secure.gravatar.com/avatar'
+            hash = self.avatar_hash or self.gravatar_hash()
         else:
             url = 'http://www.gravatar.com/avatar'
             hash = self.avatar_hash or self.gravatar_hash()
@@ -249,6 +251,21 @@ class User(UserMixin, db.Model):
     def followed_posts(self):
         return Post.query.join(Follow, Follow.followed_id == Post.author_id)\
             .filter(Follow.follower_id == self.id)
+
+    @property
+    def followers_id(self):
+        return User.query.join(Follow, Follow.follower_id == User.id)\
+            .filter(Follow.followed_id == self.id)
+
+    @property
+    def inform_followers(self):
+        emails = []
+        query = self.followers_id
+        follows = query.all()
+        for user in follows:
+            if user != self:
+                emails.append(user.email)
+        return emails
 
     def to_json(self):
         json_user = {
