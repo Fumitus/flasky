@@ -35,12 +35,15 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+.idea
 
 # SQLite databases
 *.sqlite
+data-dev.sqlite
 
 # Virtual environment
 venv
+.venv
 
 # Environment files
 .env
