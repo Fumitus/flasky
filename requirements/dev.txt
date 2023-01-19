@@ -1,6 +1,6 @@
 -r common.txt
 Faker==1.0.7
-certifi==2017.7.27.1
+certifi==2022.12.7
 chardet==3.0.4
 httpie==3.1.0
 idna==2.5
