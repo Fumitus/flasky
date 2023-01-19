@@ -46,3 +46,4 @@ venv
 # Environment files
 .env
 .env-mysql
+.azure
