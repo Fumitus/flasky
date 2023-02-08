@@ -15,7 +15,7 @@ chardet==4.0.0
 chevron==0.14.0
 click==7.1.2
 cookiecutter==2.1.1
-cryptography==38.0.1
+cryptography==39.0.1
 dateparser==1.1.2
 docker==4.2.2
 dominate==2.3.5
