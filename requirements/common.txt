@@ -71,5 +71,5 @@ waitress==2.1.2
 watchdog==2.1.2
 webencodings==0.5.1
 websocket-client==1.4.1
-Werkzeug==0.16.0
+Werkzeug==2.2.3
 WTForms==2.2.1
